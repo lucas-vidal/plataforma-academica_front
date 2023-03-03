@@ -1,7 +1,7 @@
     var userdata;
     const string = localStorage.userdata;
     userdata = JSON.parse(string);
-    const API = 'http://localhost:3000';
+    const API = 'https://plataforma-academica-back.onrender.com';
     // var perfilAct
     var codeCareerActual
     var nameCareerActual
@@ -588,7 +588,7 @@ function cargarDatosAlumnos(){
         try {
             const respuesta = await fetch(API + '/users', );
             const usersdata = await respuesta.json();
-            const alumnosdata = usersdata[0].filter(usersdata => usersdata.admin == false && usersdata.teacher == false);
+            const alumnosdata = usersdata.filter(usersdata => usersdata.admin == false && usersdata.teacher == false);
             ordenarPorApellido(alumnosdata)
             alumnosdata.map((alumnodata) => tablaDatosUsuariosHTML(alumnodata));
         }
@@ -603,7 +603,7 @@ function cargarDatosDocentes(){
         try {
             const respuesta = await fetch(API + '/users', );
             const usersdata = await respuesta.json();
-            const alumnosdata = usersdata[0].filter(usersdata => usersdata.admin == false && usersdata.teacher == true);
+            const alumnosdata = usersdata.filter(usersdata => usersdata.admin == false && usersdata.teacher == true);
             ordenarPorApellido(alumnosdata)
             alumnosdata.map((alumnodata) => tablaDatosUsuariosHTML(alumnodata));
         }
@@ -618,7 +618,7 @@ function cargarDatosAdministradores(){
         try {
             const respuesta = await fetch(API + '/users', );
             const usersdata = await respuesta.json();
-            const alumnosdata = usersdata[0].filter(usersdata => usersdata.admin == true && usersdata.teacher == false);
+            const alumnosdata = usersdata.filter(usersdata => usersdata.admin == true && usersdata.teacher == false);
             ordenarPorApellido(alumnosdata)
             alumnosdata.map((alumnodata) => tablaDatosUsuariosHTML(alumnodata));
         }
@@ -833,19 +833,19 @@ function cargarDatosUsuariosEnInputs(dni){
                     mode: 'cors'
                 });
             const userdata = await respuesta.json();
-            var datatime_admission = convertirDataTimeInObjct(userdata[0].date_of_admission)
-            var datatime_brith = convertirDataTimeInObjct(userdata[0].date_of_brith)
+            var datatime_admission = convertirDataTimeInObjct(userdata.date_of_admission)
+            var datatime_brith = convertirDataTimeInObjct(userdata.date_of_brith)
 
-            document.getElementById("dni").value = userdata[0].dni
-            document.getElementById("name").value = userdata[0].name
-            document.getElementById("surname").value = userdata[0].surname
-            document.getElementById("password").value = userdata[0].password
+            document.getElementById("dni").value = userdata.dni
+            document.getElementById("name").value = userdata.name
+            document.getElementById("surname").value = userdata.surname
+            document.getElementById("password").value = userdata.password
             document.getElementById("ano1").value = datatime_brith[2]
             document.getElementById("mes1").value = datatime_brith[1]
-            document.getElementById("dia1").value = datatime_brith[0]
+            document.getElementById("dia1").value = datatime_brith
             document.getElementById("ano2").value = datatime_admission[2]
             document.getElementById("mes2").value = datatime_admission[1]
-            document.getElementById("dia2").value = datatime_admission[0]
+            document.getElementById("dia2").value = datatime_admission
             document.getElementById("botonModificar").innerHTML = '<button onclick="actualizarUsuario(' + dni + ')" class="btn btn-primary"style="width: 100%; font-size: 100%;">Modificar</button>';
         } catch (error) {
             console.log(error)
@@ -861,9 +861,9 @@ function cargarDatosCarreras(){
         try {
             const respuesta = await fetch(API + '/careers', );
             const careers = await respuesta.json();
-            // const alumnosdata = usersdata[0].filter(usersdata => usersdata.admin == false && usersdata.teacher == false);
-            ordenarPorCodigo(careers[0])
-            careers[0].map((career) => tablaDatosCarrerasHTML(career));
+            // const alumnosdata = usersdata.filter(usersdata => usersdata.admin == false && usersdata.teacher == false);
+            ordenarPorCodigo(careers)
+            careers.map((career) => tablaDatosCarrerasHTML(career));
         }
         catch (error) {
             console.log(error)
@@ -999,8 +999,8 @@ function cargarDatosCarrerasEnInputs(code){
             const careers = await respuesta.json();
 
 
-            document.getElementById("code").value = careers[0].code
-            document.getElementById("name").value = careers[0].name
+            document.getElementById("code").value = careers.code
+            document.getElementById("name").value = careers.name
 
             document.getElementById("botonModificar").innerHTML = '<button onclick="actualizarCarrera(' + code + ')" class="btn btn-primary"style="width: 100%; font-size: 100%;">Modificar</button>';
         } catch (error) {
@@ -1042,8 +1042,8 @@ function cargarCarreraActual(code){
             const respuesta = await fetch(API + '/careers/' + code, );
             const career = await respuesta.json();
 console.log(career)
-            codeCareerActual =  career[0].code
-            nameCareerActual =  career[0].name
+            codeCareerActual =  career.code
+            nameCareerActual =  career.name
             tituloCarrerasActiva();
         }
         catch (error) {
@@ -1275,10 +1275,10 @@ function cargarDatosMateriasEnInputs(code){
             const careers = await respuesta.json();
 
 
-            document.getElementById("code").value = careers[0].code
-            document.getElementById("name").value = careers[0].name
-            document.getElementById("season").value = careers[0].season
-            document.getElementById("teacher").value = careers[0].teacher
+            document.getElementById("code").value = careers.code
+            document.getElementById("name").value = careers.name
+            document.getElementById("season").value = careers.season
+            document.getElementById("teacher").value = careers.teacher
 
             document.getElementById("botonModificar").innerHTML = '<button onclick="actualizarMateria(' + code + ')" class="btn btn-primary"style="width: 100%; font-size: 100%;">Modificar</button>';
         } catch (error) {
@@ -1300,9 +1300,9 @@ function cargarDatosExamenAdmin(){
             const respuesta = await fetch(API + '/courses', );
             const courses = await respuesta.json();
             console.log(courses)
-            // const alumnosdata = usersdata[0].filter(usersdata => usersdata.admin == false && usersdata.teacher == false);
+            // const alumnosdata = usersdata.filter(usersdata => usersdata.admin == false && usersdata.teacher == false);
             // ordenarPorNombre(courses)
-            courses[0].map((course) => tablaDatosExamenesAdminHTML(course));
+            courses.map((course) => tablaDatosExamenesAdminHTML(course));
         }
         catch (error) {
             console.log(error)

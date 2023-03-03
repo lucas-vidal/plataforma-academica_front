@@ -1,5 +1,5 @@
 
-const API = 'http://localhost:3000';
+const API = 'https://plataforma-academica-back.onrender.com';
 
 const string = localStorage.userdata;
 var userdata = JSON.parse(string);
@@ -30,9 +30,10 @@ function login() {
                 mode: 'cors'
             });
             const user_data = await respuesta.json();
-            if (username == user_data[0].dni && password == user_data[0].password) {
+            console.log(user_data)
+            if (username == user_data.dni && password == user_data.password) {
 
-                var userdata = JSON.stringify(user_data[0]);
+                var userdata = JSON.stringify(user_data);
                 localStorage.setItem('userdata', userdata);
 
                 var perfilActivo;
@@ -67,7 +68,6 @@ function redireccion() {
 
     if (userdata != null) {
         window.location.href = "/home.html";
-        console.log("loco")
     }
 }
 
